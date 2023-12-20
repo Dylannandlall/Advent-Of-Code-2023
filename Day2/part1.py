@@ -12,28 +12,23 @@ with open("input.txt") as f:
 
 total = 0
 for line in lines:
-    game_id = line.split(":")[0].split(" ")[1]
+    game_id = line.split()[1][:-1]
     game = line.split(":")[1].strip()
     
-    red = 0
-    green = 0
-    blue = 0
-    for set in game.split(";"):
-        for cube in set.split(","):
-            #print(cube)
-            cube_count = cube.strip().split(" ")[0]
-            cube_color = cube.strip().split(" ")[1]
-
-            if cube_color == "red":
-                red += int(cube_count)
-            elif cube_color == "green":
-                green += int(cube_count)
-            elif cube_color == "blue":
-                blue += int(cube_count)
-
-    #print("red: {}, green: {}, blue: {}".format(red, green, blue))
-    if red <= RED and green <= GREEN and blue <= BLUE:
+    max_list = [0, 0, 0]
+    for group in game.split(";"):
+        for cube in group.strip().split(","):
+            cube_count = cube.split()[0]
+            cube_color = cube.split()[1]
+            
+            if cube_color == "red" and int(cube_count) > RED:
+                max_list[0] = int(cube_count)
+            if cube_color == "green" and int(cube_count) > GREEN:
+                max_list[1] = int(cube_count)
+            if cube_color == "blue" and int(cube_count) > BLUE:
+                max_list[2] = int(cube_count)
+        
+    if max_list[0] <= RED and max_list[1] <= GREEN and max_list[2] <= BLUE:
         total += int(game_id)
 
 print(total)
-
